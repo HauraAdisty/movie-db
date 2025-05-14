@@ -18,9 +18,9 @@
     </style>
 </head>
 <body>
-    <footer class="bg-dark text-center text-white py-3">
+    <footer class="bg-success text-center text-white py-3">
         <div class="container">
-            Copyright &copy; <?php echo date('Y'); ?> by Haura Adisty
+            Copyright &copy; <?php echo date('Y'); ?> Developed by Haura Adisty
         </div>
     </footer>
 </body>

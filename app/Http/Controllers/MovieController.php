@@ -10,8 +10,10 @@ class MovieController extends Controller
 {
     public function index() 
     {
-        $movies = Movie::select('title', 'synopsis', 'cover_image')->paginate(6);
-        return view('movie.index', compact('movies'));
+        // $movies = Movie::select('title', 'synopsis', 'cover_image')->paginate(6);
+        // return view('movie.index    ', compact('movies'));
+        $movies = Movie::latest()->paginate(6);
+        return view('homepage', compact('movies'));
     }
 
     public function search(Request $request)
