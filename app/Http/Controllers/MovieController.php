@@ -18,6 +18,7 @@ class MovieController extends Controller
         return view('homepage', compact('movies'));
     }
 
+
     public function search(Request $request)
     {
         $query = $request->input('query');
@@ -28,9 +29,10 @@ class MovieController extends Controller
         return view('movie.index', compact('movies'));
     }
 
-    public function detail_movie($id, $slug){
-    $movie = Movie::find($id);
-    return view('movie_detail', compact('movie'));
+    public function detail_movie($id,$slug) {
+        $movie = Movie::find($id);
+        // dd($movie);
+        return view('movie.detail_movie', compact('movie'));
     }
 
 
@@ -42,22 +44,33 @@ class MovieController extends Controller
 
     public function store(Request $request)
 {
-    // Proses upload cover
-    $cover = $request->file('cover_image');
-    $namaFileCover = time() . '_' . $cover->getClientOriginalName();
-    $cover->move(public_path('covers'), $namaFileCover);
-
-    Movie::create([
-        'title' => $request->title,
-        'slung' => Str::slug($request->title),
-        'synopsis' => $request->synopsis,
-        'category_id' => $request->category_id,
-        'year' => $request->year,
-        'actors' => $request->actors,
-        'cover_image' => 'covers/' . $namaFileCover, // simpan folder + nama file
+    $validated = $request->validate([
+        'title' => 'required',
+        'synopsis' => 'required',
+        'category_id' => 'required',
+        'year' => 'required|integer|min:1900|max:' . date('Y'),
+        'actors' => 'required',
+        'cover_image' => 'required|image|max:2048',
     ]);
 
-    return redirect('/')->with('success', 'Movie berhasil ditambahkan!');
+    // Buat slug dari title, misalnya "Judul Film Keren" jadi "judul-film-keren"
+    $validated['slug'] = Str::slug($request->title);
+
+    // Upload cover image
+    if ($request->hasFile('cover_image')) {
+            $validated['cover_image'] = $request->file('cover_image')->store('covers', 'public');
+        }
+
+    Movie::create($validated);
+
+    return redirect()->route('movie.index')->with('success', 'Movie berhasil ditambahkan!');
 }
+
+    public function show($id)
+{
+    $movie = Movie::findOrFail($id);
+    return redirect()->route('movie.detail', ['id' => $movie->id, 'slug' => $movie->slug]);
+}
+
 
 }

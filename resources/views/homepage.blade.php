@@ -3,31 +3,52 @@
 @section('title', 'Homepage')
 
 @section('content')
+<style>
+    .movie-img {
+        width: 250px;
+        height: 375px;
+        object-fit: cover;
+        border-top-left-radius: .25rem;
+        border-bottom-left-radius: .25rem;
+    }
 
-    <h1>Latest Movie</h1>
+    .movie-card {
+        height: 375px; /* Kartu dan gambar seragam */
+    }
+
+    .movie-body {
+        width: 100%;
+        padding: 1rem;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+</style>
+
+<h1>Popular Movie</h1>
+<div class="container mt-4">
     <div class="row">
-        @foreach($movies as $movie)
-        <div class="col-lg-6">
+        @foreach ($movies as $movie)
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm h-100 d-flex flex-row movie-card">
+                    <img src="{{ filter_var($movie->cover_image, FILTER_VALIDATE_URL) ? $movie->cover_image : asset('storage/' . $movie->cover_image) }}"
+                         alt="{{ $movie->title }}"
+                         class="movie-img">
+                    <div class="movie-body">
+                        <h5 class="card-title">{{ $movie->title }}</h5>
+                        <p class="card-text">{{ Str::limit($movie->synopsis, 100, '...') }}</p>
+                        <p class="card-text">Year: {{ $movie->year }}</p>
+                        <a href="/movie/{{ $movie->id }}/{{ $movie->slug }}" class="btn btn-success align-self-start">Lihat Selanjutnya</a>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
 
-        <div class="card mb-3" style="max-width: 540px;">
-     <div class="row g-0">
-    <div class="col-md-4">
-      <img src="{{ asset($movie->cover_image) }}" class="img-fluid rounded-start" alt="...">
+    <div class="d-flex justify-content-end mt-4">
+        {{ $movies->links('pagination::bootstrap-5') }}
     </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">{{$movie->title}}</h5>
-        <p class="card-text">{{Str::words($movie->synopsis, 15)}}</p>
-        <p class="card-text"><small class="text-body-secondary">Year: {{$movie->year}}</small></p>
-        <a href="/movie/{{ $movie->id }}/{{ $movie->slung }}"class="btn btn-success">Read More </a>
-      </div>
-    </div>
-    </div>
-  </div>
 </div>
-@endforeach
-<div>
-    {{ $movies->links() }}
-</div>
-    </div>
-    @endsection
+   
+@endsection

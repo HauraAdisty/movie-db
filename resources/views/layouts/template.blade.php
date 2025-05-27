@@ -12,7 +12,7 @@
             <a class="navbar-brand" href="#">Movie DB</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('movies.index') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="/movie/create">input form</a></li>
                     
                 </ul>
@@ -20,6 +20,20 @@
                     <input class="form-control me-2" type="search" placeholder="Search">
                     <button class="btn btn-outline-light" type="submit">Search</button>
                 </form>
+                @auth
+                    <div class="d-flex align-items-center text-white me-2">
+                        Hello, {{ explode(' ', auth()->user()->name)[0] ?? auth()->user()->email }}
+                    </div>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-light">Logout</button>
+                    </form>
+                    @endauth
+
+
+                        @guest
+                        <a href="{{ route('login') }}" class="btn btn-outline-light">Login</a>
+                @endguest
             </div>
         </div>
     </nav>

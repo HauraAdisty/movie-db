@@ -6,6 +6,15 @@
 
 {{-- form movie --}}
 <h1>Form Data Movie</h1>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+ </div>
+@endif
 <form action="/movie/store" method="POST" enctype="multipart/form-data">
     @csrf {{-- Jangan lupa token CSRF untuk keamanan --}}
 

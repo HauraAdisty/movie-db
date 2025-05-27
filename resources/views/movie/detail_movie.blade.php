@@ -11,9 +11,11 @@
             <div class="card mb-3">
 
                 <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="{{ asset($movie->cover_image) }}" class="img-fluid rounded-start" alt="...">
-                    </div>
+                    @if (filter_var($movie->cover_image, FILTER_VALIDATE_URL))
+                        <img src="{{ $movie->cover_image }}" alt="{{ $movie->title }}" style="width: 250px; height: auto;">
+                    @else
+                        <img src="{{ asset('storage/' . $movie->cover_image) }}" alt="{{ $movie->title }}" style="width: 250px; height: auto;">
+                    @endif
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">{{ $movie->title }}</h5>

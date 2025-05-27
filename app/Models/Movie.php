@@ -10,7 +10,7 @@ class Movie extends Model
 {
     use HasFactory;
 
-   protected $fillable = ['title', 'slung', 'synopsis', 'category_id', 'year', 'actors', 'cover_image'];
+   protected $fillable = ['title', 'slug', 'synopsis', 'category_id', 'year', 'actors', 'cover_image'];
 
     public function category(): BelongsTo
     {
