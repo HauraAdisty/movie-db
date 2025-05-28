@@ -13,7 +13,7 @@
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="{{ route('movies.index') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/movie/create">input form</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/movie/create">Add Movie</a></li>
                     
                 </ul>
                 <form class="d-flex">

@@ -26,3 +26,11 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/movie/{id}/{slug}', [MovieController::class, 'detail_movie'])->name('movie.detail');
+
+
+Route::get('/movies', [MovieController::class, 'list'])->name('movie.list');
+
+Route::get('/movie/{id}/edit', [MovieController::class, 'edit'])->name('movie.edit');
+// Route::put('/movie/{id}', [MovieController::class, 'update'])->name('movie.update');
+Route::delete('/movie/{id}', [MovieController::class, 'destroy'])->name('movie.destroy');
+
