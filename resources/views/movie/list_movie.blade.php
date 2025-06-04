@@ -21,10 +21,15 @@
                     <td>{{ $movie->category->category_name }}</td>
                     <td>{{ $movie->year }}</td>
                     <td class="text-center">
-                        
-                        <a href="{{ route('movie.detail', ['id' => $movie->id, 'slug' => $movie->slug]) }}" class="btn btn-success btn-sm">Detail</a>
-                    
-                        <a href="{{ route('movie.edit', $movie->id) }}" class="btn btn-warning btn-sm">Edit</a>
+
+                        <a href="{{ route('movie.detail', ['id' => $movie->id, 'slug' => $movie->slug]) }}"
+                            class="btn btn-success btn-sm">Detail</a>
+
+
+
+                        @if (auth()->user()->role !== 'user')
+                            <a href="{{ route('movie.edit', $movie->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        @endif
 
                         <form action="{{ route('movie.destroy', $movie->id) }}" method="POST" class="d-inline"
                             onsubmit="return confirm('Are you sure?');">

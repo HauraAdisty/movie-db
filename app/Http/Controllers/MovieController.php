@@ -6,6 +6,7 @@ use App\Models\Movie;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 
 class MovieController extends Controller
@@ -85,25 +86,51 @@ class MovieController extends Controller
         return view('movie.edit_movie', compact('movie', 'categories'));
     }
 
+
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|string|max:255',
+            'synopsis' => 'nullable|string',
+            'category_id' => 'required|integer',
             'year' => 'required|integer',
-            // tambahkan validasi lain sesuai kebutuhan
+            'actors' => 'nullable|string',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $movie = Movie::findOrFail($id);
-        $movie->update($request->all());
+        $movie->title = $request->title;
+        $movie->slug = Str::slug($request->title); // Generate slug otomatis dari title
+        $movie->synopsis = $request->synopsis;
+        $movie->category_id = $request->category_id;
+        $movie->year = $request->year;
+        $movie->actors = $request->actors;
 
-        return redirect('/movie')->with('success', 'Movie updated successfully.');
+        if ($request->hasFile('cover_image')) {
+            if ($movie->cover_image && \Storage::exists('public/' . $movie->cover_image)) {
+                \Storage::delete('public/' . $movie->cover_image);
+            }
+
+            $path = $request->file('cover_image')->store('covers', 'public');
+            $movie->cover_image = $path;
+        }
+
+        $movie->save();
+
+        return redirect()->route('movie.list')->with('success', 'Movie updated successfully!');
     }
+
+
 
     public function destroy($id)
     {
-        $movie = Movie::findOrFail($id);
-        $movie->delete();
+        if (Gate::allows('delete-movie')) {
+            $movie = Movie::findOrFail($id);
+            $movie->delete();
 
-        return redirect('/movies')->with('success', 'Movie deleted successfully.');
+            return redirect('/movies')->with('success', 'Movie deleted successfully.');
+        }
+
+        abort(403);
     }
 }

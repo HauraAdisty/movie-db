@@ -16,10 +16,10 @@
                     <li class="nav-item"><a class="nav-link" href="/movie/create">Add Movie</a></li>
                     
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
+               <form class="d-flex me-3" action="{{ route('movies.search') }}" method="GET">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search by title" aria-label="Search" value="{{ request()->query('query') }}">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+            </form>
                 @auth
                     <div class="d-flex align-items-center text-white me-2">
                         Hello, {{ explode(' ', auth()->user()->name)[0] ?? auth()->user()->email }}
