@@ -15,7 +15,13 @@ class MovieController extends Controller
     {
         // $movies = Movie::select('title', 'synopsis', 'cover_image')->paginate(6);
         // return view('movie.index    ', compact('movies'));
-        $movies = Movie::latest()->paginate(6);
+        $query = Movie::latest();
+
+        if (request('search')) {
+            $query->where('title', 'like', '%' . request('search') . '%');
+    }
+
+        $movies = $query ->paginate(6)->withQueryString();
         return view('homepage', compact('movies'));
     }
     public function list()

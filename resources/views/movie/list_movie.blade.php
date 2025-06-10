@@ -29,7 +29,7 @@
 
                         @if (auth()->user()->role !== 'user')
                             <a href="{{ route('movie.edit', $movie->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        @endif
+                        
 
                         <form action="{{ route('movie.destroy', $movie->id) }}" method="POST" class="d-inline"
                             onsubmit="return confirm('Are you sure?');">
@@ -37,6 +37,7 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
+                        @endif
                     </td>
 
                     </td>
